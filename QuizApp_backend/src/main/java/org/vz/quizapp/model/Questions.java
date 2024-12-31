@@ -13,7 +13,7 @@ import lombok.Setter;
 @Data
 public class Questions {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String category;
     private String difficultyLevel;
