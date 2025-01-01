@@ -32,7 +32,7 @@ public class QuestionController {
     @PostMapping("/addQuestions")
     public ResponseEntity<?> addQuestions(@RequestBody Questions questions){
         service.addQuestions(questions);
-        return new ResponseEntity<>("Question Added!" , HttpStatus.OK);
+        return new ResponseEntity<>("Question Added!" , HttpStatus.CREATED);
     }
 
     @GetMapping("/allQuestions/{id}")
