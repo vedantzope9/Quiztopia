@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizApp - View All Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .questions-table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .questions-table th,
+        .questions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .questions-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .questions-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .question-container {
+            margin: 20px auto;
+            padding: 20px;
+            width: 60%;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container h2 {
+            color: #007bff;
+        }
+
+        .question-container p {
+            margin: 10px 0;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button-container .update-btn {
+            background-color: #007bff;
+        }
+
+        .button-container .update-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .button-container .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .button-container .back-btn {
+            background-color: #6c757d;
+        }
+
+        .button-container .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>All Questions</h1>
+
+    <table class="questions-table" id="allQuestionsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Difficulty Level</th>
+                <th>Question</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Right Answer</th>
+            </tr>
+        </thead>
+        <tbody id="questionsBody">
+        </tbody>
+    </table>
+
+    <div id="questionDetail" class="question-container" style="display: none;">
+        <h2 id="questionTitle"></h2>
+        <p><strong>Category:</strong> <span id="questionCategory"></span></p>
+        <p><strong>Difficulty Level:</strong> <span id="questionDifficulty"></span></p>
+        <p><strong>Options:</strong></p>
+        <ul>
+            <li id="option1"></li>
+            <li id="option2"></li>
+            <li id="option3"></li>
+            <li id="option4"></li>
+        </ul>
+        <p><strong>Right Answer:</strong> <span id="rightAnswer"></span></p>
+        <div class="button-container">
+            <button class="update-btn" onclick="fetchQuestionForUpdate(currentQuestionId)">Update</button>
+
+            <button class="delete-btn">Delete</button>
+            <button class="back-btn" onclick="goBack1()">Back</button>
+        </div>
+    </div>
+
+
+    <!-- <for update > -->
+    <div id="updateQuestionForm" class="question-container" style="display: none;">
+        <h2>Update Question</h2>
+        <form id="questionUpdateForm">
+            <label for="questionTitle">Question Title:</label>
+            <input type="text" id="updateQuestionTitle" name="question_title" required><br><br>
+
+            <label for="category">Category:</label>
+            <input type="text" id="updateCategory" name="category" required><br><br>
+
+            <label for="difficulty">Difficulty Level:</label>
+            <input type="text" id="updateDifficulty" name="difficultyLevel" required><br><br>
+
+            <label for="option1">Option 1:</label>
+            <input type="text" id="updateOption1" name="option1" required><br><br>
+
+            <label for="option2">Option 2:</label>
+            <input type="text" id="updateOption2" name="option2" required><br><br>
+
+            <label for="option3">Option 3:</label>
+            <input type="text" id="updateOption3" name="option3" required><br><br>
+
+            <label for="option4">Option 4:</label>
+            <input type="text" id="updateOption4" name="option4" required><br><br>
+
+            <label for="rightAnswer">Right Answer:</label>
+            <input type="text" id="updateRightAnswer" name="right_ans" required><br><br>
+
+            <button type="button" class="update-btn" onclick="submitUpdatedQuestion()">Update</button>
+            <button type="button" class="back-btn" onclick="goBack()">Cancel</button>
+        </form>
+    </div>
+
+
+    <script>
+        const API_BASE_URL = "http://localhost:8080/question";
+
+        async function fetchAllQuestions() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/allQuestions`);
+                const questions = await response.json();
+                displayQuestions(questions);
+            } catch (error) {
+                alert(`Error fetching questions: ${error.message}`);
+            }
+        }
+
+        function displayQuestions(questions) {
+            const questionsBody = document.getElementById('questionsBody');
+            questionsBody.innerHTML = '';
+
+            questions.forEach(question => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${question.id}</td>
+                    <td>${question.category}</td>
+                    <td>${question.difficultyLevel}</td>
+                    <td><a href="#" onclick="fetchQuestionById(${question.id})">${question.question_title}</a></td>
+                    <td>${question.option1}</td>
+                    <td>${question.option2}</td>
+                    <td>${question.option3}</td>
+                    <td>${question.option4}</td>
+                    <td>${question.right_ans}</td>
+                `;
+
+                questionsBody.appendChild(row);
+            });
+        }
+
+        async function fetchQuestionById(id) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/allQuestions/${id}`);
+                const question = await response.json();
+                displayQuestionDetail(question);
+            } catch (error) {
+                alert(`Error fetching question: ${error.message}`);
+            }
+        }
+
+        function displayQuestionDetail(question) {
+            document.getElementById('allQuestionsTable').style.display = 'none';
+
+            const detailContainer = document.getElementById('questionDetail');
+            detailContainer.style.display = 'block';
+
+            document.getElementById('questionTitle').textContent = question.question_title;
+            document.getElementById('questionCategory').textContent = question.category;
+            document.getElementById('questionDifficulty').textContent = question.difficultyLevel;
+            document.getElementById('option1').textContent = question.option1;
+            document.getElementById('option2').textContent = question.option2;
+            document.getElementById('option3').textContent = question.option3;
+            document.getElementById('option4').textContent = question.option4;
+            document.getElementById('rightAnswer').textContent = question.right_ans;
+        }
+
+        function goBack1() {
+            document.getElementById('questionDetail').style.display = 'none';
+            document.getElementById('allQuestionsTable').style.display = 'table';
+            fetchAllQuestions(); // Reload questions
+        }
+
+        // Fetch questions on page load
+        fetchAllQuestions();
+
+
+        //for update
+        let currentQuestionId = null;
+
+        function showUpdateForm(question) {
+            document.getElementById('updateQuestionForm').style.display = 'block';
+            currentQuestionId = question.id;
+            document.getElementById('updateQuestionTitle').value = question.question_title;
+            document.getElementById('updateCategory').value = question.category;
+            document.getElementById('updateDifficulty').value = question.difficultyLevel;
+            document.getElementById('updateOption1').value = question.option1;
+            document.getElementById('updateOption2').value = question.option2;
+            document.getElementById('updateOption3').value = question.option3;
+            document.getElementById('updateOption4').value = question.option4;
+            document.getElementById('updateRightAnswer').value = question.right_ans;
+        }
+
+        async function submitUpdatedQuestion() {
+            const updatedQuestion = {
+                id: currentQuestionId,
+                question_title: document.getElementById('updateQuestionTitle').value,
+                category: document.getElementById('updateCategory').value,
+                difficultyLevel: document.getElementById('updateDifficulty').value,
+                option1: document.getElementById('updateOption1').value,
+                option2: document.getElementById('updateOption2').value,
+                option3: document.getElementById('updateOption3').value,
+                option4: document.getElementById('updateOption4').value,
+                right_ans: document.getElementById('updateRightAnswer').value,
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8080/question/allQuestions/${currentQuestionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedQuestion),
+                });
+
+                if (response.ok) {
+                    alert('Question Updated!');
+                    goBack();
+                } else {
+                    alert('Failed to update question.');
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        function goBack() {
+            document.getElementById('updateQuestionForm').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

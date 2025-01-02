@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizApp - Questions by Category</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-width: 600px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin: 20px auto;
+            padding: 20px;
+            background: #e9ecef;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: #fff;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>QuizApp - Find Questions by Category</h1>
+
+    <!-- Search Form -->
+    <form id="searchForm">
+        <label for="category_name">Category Name:</label>
+        <input type="text" id="category_name" name="category_name" required>
+
+        <button type="button" onclick="fetchQuestionsByCategory()">Search</button>
+    </form>
+
+    <!-- Result Display -->
+    <div id="result" class="result" style="display: none;">
+        <h2>Questions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Question Title</th>
+                    <th>Options</th>
+                    <th>Right Answer</th>
+                </tr>
+            </thead>
+            <tbody id="resultContent">
+                <!-- Questions will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_BASE_URL = "http://localhost:8080/question";
+
+        async function fetchQuestionsByCategory() {
+            const categoryName = document.getElementById('category_name').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/category/${categoryName}`);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const questions = await response.json();
+                displayQuestions(questions);
+            } catch (error) {
+                displayError(error.message);
+            }
+        }
+
+        function displayQuestions(questions) {
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+
+            resultContent.innerHTML = '';
+            if (questions.length === 0) {
+                resultContent.innerHTML = '<tr><td colspan="6">No questions found for this category.</td></tr>';
+            } else {
+                questions.forEach(question => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${question.id}</td>
+                        <td>${question.category}</td>
+                        <td>${question.difficultyLevel}</td>
+                        <td>${question.question_title}</td>
+                        <td>
+                            1. ${question.option1}<br>
+                            2. ${question.option2}<br>
+                            3. ${question.option3}<br>
+                            4. ${question.option4}
+                        </td>
+                        <td>${question.right_ans}</td>
+                    `;
+
+                    resultContent.appendChild(row);
+                });
+            }
+
+            resultDiv.style.display = 'block';
+        }
+
+        function displayError(message) {
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+
+            resultContent.innerHTML = `<tr><td colspan="6">${message}</td></tr>`;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
