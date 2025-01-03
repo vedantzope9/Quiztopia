@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizApp - View All Questions</title>
+    <link rel="stylesheet" href="allQuestions.css">
+    <script src="allQuestions.js"></script>
+</head>
+
+<body>
+    <h1>All Questions</h1>
+
+    <table class="questions-table" id="allQuestionsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Difficulty Level</th>
+                <th>Question</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Right Answer</th>
+            </tr>
+        </thead>
+        <tbody id="questionsBody">
+        </tbody>
+    </table>
+
+    <div id="questionDetail" class="question-container" style="display: none;">
+        <h2 id="questionTitle"></h2>
+        <p><strong>Category:</strong> <span id="questionCategory"></span></p>
+        <p><strong>Difficulty Level:</strong> <span id="questionDifficulty"></span></p>
+        <p><strong>Options:</strong></p>
+        <ul>
+            <li id="option1"></li>
+            <li id="option2"></li>
+            <li id="option3"></li>
+            <li id="option4"></li>
+        </ul>
+        <p><strong>Right Answer:</strong> <span id="rightAnswer"></span></p>
+        <div class="button-container">
+            <button class="update-btn" onclick="fetchQuestionForUpdate(currentQuestionId)">Update</button>
+            <button class="delete-btn" onclick="confirmDelete(currentQuestionId)">Delete</button>
+            <button class="back-btn" onclick="goBack1()">Back</button>
+        </div>
+    </div>
+
+    <!-- <for update> -->
+
+    <div id="updateQuestionForm" class="question-container" style="display: none;">
+        <h2>Update Question</h2>
+        <form id="questionUpdateForm">
+            <label for="updateQuestionTitle">Question Title:</label>
+            <input type="text" id="updateQuestionTitle" name="question_title" required
+                placeholder="Enter the question title">
+
+            <label for="updateCategory">Category:</label>
+            <input type="text" id="updateCategory" name="category" required placeholder="Enter the category">
+
+            <label for="updateDifficulty">Difficulty Level:</label>
+            <input type="text" id="updateDifficulty" name="difficultyLevel" required
+                placeholder="Enter difficulty level">
+
+            <label for="updateOption1">Option 1:</label>
+            <input type="text" id="updateOption1" name="option1" required placeholder="Enter option 1">
+
+            <label for="updateOption2">Option 2:</label>
+            <input type="text" id="updateOption2" name="option2" required placeholder="Enter option 2">
+
+            <label for="updateOption3">Option 3:</label>
+            <input type="text" id="updateOption3" name="option3" required placeholder="Enter option 3">
+
+            <label for="updateOption4">Option 4:</label>
+            <input type="text" id="updateOption4" name="option4" required placeholder="Enter option 4">
+
+            <label for="updateRightAnswer">Right Answer:</label>
+            <input type="text" id="updateRightAnswer" name="right_ans" required placeholder="Enter the correct answer">
+
+            <div class="button-container">
+                <button type="button" class="update-btn" onclick="submitUpdatedQuestion()">Update</button>
+                <button type="button" class="back-btn" onclick="goBack(currentQuestionId)">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

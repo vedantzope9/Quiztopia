@@ -2,20 +2,39 @@
 <html lang="en">
 
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuizApp - View All Questions</title>
     <style>
+        :root {
+            --bg-color-light: #f7f7f7;
+            --text-color-light: #333;
+            --bg-color-dark: #121212;
+            --text-color-dark: #f5f5f5;
+            --primary-color: #007bff;
+            --danger-color: #dc3545;
+            --secondary-color: #6c757d;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: var(--text-color-light);
+        }
+
+        .dark-mode {
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
         }
 
         .questions-table {
@@ -24,7 +43,7 @@
             width: 90%;
             background: #fff;
             border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--card-shadow);
         }
 
         .questions-table th,
@@ -35,12 +54,16 @@
         }
 
         .questions-table th {
-            background-color: #007bff;
+            background-color: var(--primary-color);
             color: white;
         }
 
         .questions-table tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        .questions-table tr:hover {
+            background-color: #e9ecef;
         }
 
         .question-container {
@@ -49,15 +72,24 @@
             width: 60%;
             background: #fff;
             border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--card-shadow);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .question-container h2 {
-            color: #007bff;
-        }
-
-        .question-container p {
-            margin: 10px 0;
+            color: var(--primary-color);
         }
 
         .button-container {
@@ -72,37 +104,82 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
         .button-container .update-btn {
-            background-color: #007bff;
+            background-color: var(--primary-color);
         }
 
         .button-container .update-btn:hover {
             background-color: #0056b3;
+            box-shadow: var(--card-shadow);
         }
 
         .button-container .delete-btn {
-            background-color: #dc3545;
+            background-color: var(--danger-color);
         }
 
         .button-container .delete-btn:hover {
             background-color: #c82333;
+            box-shadow: var(--card-shadow);
         }
 
         .button-container .back-btn {
-            background-color: #6c757d;
+            background-color: var(--secondary-color);
         }
 
         .button-container .back-btn:hover {
             background-color: #5a6268;
+            box-shadow: var(--card-shadow);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            border-color: #007bff;
+        }
+
+        .toggle-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .toggle-container button {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .toggle-container button:hover {
+            background-color: #0056b3;
+            box-shadow: var(--card-shadow);
         }
     </style>
 </head>
 
 <body>
+    <div class="toggle-container">
+        <button onclick="toggleDarkMode()">Toggle Light/Dark Mode</button>
+    </div>
+
     <h1>All Questions</h1>
 
+    <!-- Questions Table -->
     <table class="questions-table" id="allQuestionsTable">
         <thead>
             <tr>
@@ -117,10 +194,10 @@
                 <th>Right Answer</th>
             </tr>
         </thead>
-        <tbody id="questionsBody">
-        </tbody>
+        <tbody id="questionsBody"></tbody>
     </table>
 
+    <!-- Question Detail -->
     <div id="questionDetail" class="question-container" style="display: none;">
         <h2 id="questionTitle"></h2>
         <p><strong>Category:</strong> <span id="questionCategory"></span></p>
@@ -135,48 +212,52 @@
         <p><strong>Right Answer:</strong> <span id="rightAnswer"></span></p>
         <div class="button-container">
             <button class="update-btn" onclick="fetchQuestionForUpdate(currentQuestionId)">Update</button>
-
-            <button class="delete-btn">Delete</button>
+            <button class="delete-btn" onclick="confirmDelete(currentQuestionId)">Delete</button>
             <button class="back-btn" onclick="goBack1()">Back</button>
         </div>
     </div>
 
+    <!-- <for update> -->
 
-    <!-- <for update > -->
     <div id="updateQuestionForm" class="question-container" style="display: none;">
         <h2>Update Question</h2>
         <form id="questionUpdateForm">
-            <label for="questionTitle">Question Title:</label>
-            <input type="text" id="updateQuestionTitle" name="question_title" required><br><br>
+            <label for="updateQuestionTitle">Question Title:</label>
+            <input type="text" id="updateQuestionTitle" name="question_title" required
+                placeholder="Enter the question title">
 
-            <label for="category">Category:</label>
-            <input type="text" id="updateCategory" name="category" required><br><br>
+            <label for="updateCategory">Category:</label>
+            <input type="text" id="updateCategory" name="category" required placeholder="Enter the category">
 
-            <label for="difficulty">Difficulty Level:</label>
-            <input type="text" id="updateDifficulty" name="difficultyLevel" required><br><br>
+            <label for="updateDifficulty">Difficulty Level:</label>
+            <input type="text" id="updateDifficulty" name="difficultyLevel" required
+                placeholder="Enter difficulty level">
 
-            <label for="option1">Option 1:</label>
-            <input type="text" id="updateOption1" name="option1" required><br><br>
+            <label for="updateOption1">Option 1:</label>
+            <input type="text" id="updateOption1" name="option1" required placeholder="Enter option 1">
 
-            <label for="option2">Option 2:</label>
-            <input type="text" id="updateOption2" name="option2" required><br><br>
+            <label for="updateOption2">Option 2:</label>
+            <input type="text" id="updateOption2" name="option2" required placeholder="Enter option 2">
 
-            <label for="option3">Option 3:</label>
-            <input type="text" id="updateOption3" name="option3" required><br><br>
+            <label for="updateOption3">Option 3:</label>
+            <input type="text" id="updateOption3" name="option3" required placeholder="Enter option 3">
 
-            <label for="option4">Option 4:</label>
-            <input type="text" id="updateOption4" name="option4" required><br><br>
+            <label for="updateOption4">Option 4:</label>
+            <input type="text" id="updateOption4" name="option4" required placeholder="Enter option 4">
 
-            <label for="rightAnswer">Right Answer:</label>
-            <input type="text" id="updateRightAnswer" name="right_ans" required><br><br>
+            <label for="updateRightAnswer">Right Answer:</label>
+            <input type="text" id="updateRightAnswer" name="right_ans" required placeholder="Enter the correct answer">
 
-            <button type="button" class="update-btn" onclick="submitUpdatedQuestion()">Update</button>
-            <button type="button" class="back-btn" onclick="goBack()">Cancel</button>
+            <div class="button-container">
+                <button type="button" class="update-btn" onclick="submitUpdatedQuestion()">Update</button>
+                <button type="button" class="back-btn" onclick="goBack(currentQuestionId)">Cancel</button>
+            </div>
         </form>
     </div>
 
 
     <script>
+        let currentQuestionId;
         const API_BASE_URL = "http://localhost:8080/question";
 
         async function fetchAllQuestions() {
@@ -228,6 +309,8 @@
             const detailContainer = document.getElementById('questionDetail');
             detailContainer.style.display = 'block';
 
+            currentQuestionId = question.id;
+
             document.getElementById('questionTitle').textContent = question.question_title;
             document.getElementById('questionCategory').textContent = question.category;
             document.getElementById('questionDifficulty').textContent = question.difficultyLevel;
@@ -249,20 +332,41 @@
 
 
         //for update
-        let currentQuestionId = null;
+        async function fetchQuestionForUpdate(id) {
+            if (!id) {
+                alert("Error: Invalid question ID");
+                return;
+            }
+            console.log(`Fetching question for update: ${id}`);
+            try {
+                const response = await fetch(`${API_BASE_URL}/allQuestions/${id}`);
+                const question = await response.json();
+                console.log(question); // Check the structure of the fetched question object
+                showUpdateForm(question);
+            } catch (error) {
+                alert(`Error fetching question for update: ${error.message}`);
+            }
+        }
+
+
 
         function showUpdateForm(question) {
+            document.getElementById('allQuestionsTable').style.display = 'none';
+            document.getElementById('questionDetail').style.display = 'none';
             document.getElementById('updateQuestionForm').style.display = 'block';
-            currentQuestionId = question.id;
-            document.getElementById('updateQuestionTitle').value = question.question_title;
-            document.getElementById('updateCategory').value = question.category;
-            document.getElementById('updateDifficulty').value = question.difficultyLevel;
-            document.getElementById('updateOption1').value = question.option1;
-            document.getElementById('updateOption2').value = question.option2;
-            document.getElementById('updateOption3').value = question.option3;
-            document.getElementById('updateOption4').value = question.option4;
-            document.getElementById('updateRightAnswer').value = question.right_ans;
+
+            currentQuestionId = question.id; // Set globally
+            document.getElementById('updateQuestionTitle').value = question.question_title || '';
+            document.getElementById('updateCategory').value = question.category || '';
+            document.getElementById('updateDifficulty').value = question.difficultyLevel || '';
+            document.getElementById('updateOption1').value = question.option1 || '';
+            document.getElementById('updateOption2').value = question.option2 || '';
+            document.getElementById('updateOption3').value = question.option3 || '';
+            document.getElementById('updateOption4').value = question.option4 || '';
+            document.getElementById('updateRightAnswer').value = question.right_ans || '';
         }
+
+
 
         async function submitUpdatedQuestion() {
             const updatedQuestion = {
@@ -278,7 +382,7 @@
             };
 
             try {
-                const response = await fetch(`http://localhost:8080/question/allQuestions/${currentQuestionId}`, {
+                const response = await fetch(`${API_BASE_URL}/allQuestions/${currentQuestionId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -287,19 +391,72 @@
                 });
 
                 if (response.ok) {
-                    alert('Question Updated!');
+                    alert('Question updated successfully!');
                     goBack();
+                    fetchAllQuestions(); // Refresh questions list
                 } else {
-                    alert('Failed to update question.');
+                    alert('Failed to update question. Please try again.');
                 }
             } catch (error) {
-                alert(`Error: ${error.message}`);
+                alert(`Error updating question: ${error.message}`);
             }
         }
 
-        function goBack() {
+        function goBack(id) {
             document.getElementById('updateQuestionForm').style.display = 'none';
+            document.getElementById('allQuestionsTable').style.display = 'table';
+            fetchQuestionById(id); // Reload questions
         }
+
+
+        //for delete
+        async function confirmDelete(id) {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to delete this question?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/allQuestions/${id}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The question has been deleted.',
+                            'success'
+                        );
+                        goBack1(); // Refresh question list
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            'Failed to delete the question. Please try again.',
+                            'error'
+                        );
+                    }
+                } catch (error) {
+                    Swal.fire(
+                        'Error!',
+                        `Error deleting question: ${error.message}`,
+                        'error'
+                    );
+                }
+            }
+        }
+
+        //toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
     </script>
 </body>
 

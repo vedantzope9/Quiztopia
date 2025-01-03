@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizApp - Questions by Category</title>
+    <link rel="stylesheet" href="findByCategory.css">
+    <script src="findByCategory.js"></script>
+    
+</head>
+<body>
+    <h1>QuizApp - Find Questions by Category</h1>
+
+    <!-- Search Form -->
+    <form id="searchForm">
+        <label for="category_name">Category Name:</label>
+        <input type="text" id="category_name" name="category_name" required>
+
+        <button type="button" onclick="fetchQuestionsByCategory()">Search</button>
+    </form>
+
+    <!-- Result Display -->
+    <div id="result" class="result" style="display: none;">
+        <h2>Questions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Question Title</th>
+                    <th>Options</th>
+                    <th>Right Answer</th>
+                </tr>
+            </thead>
+            <tbody id="resultContent">
+                <!-- Questions will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
