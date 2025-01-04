@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.vz.quizapp.exception.QuestionException;
 import org.vz.quizapp.model.QuestionWrapper;
 import org.vz.quizapp.model.Questions;
+import org.vz.quizapp.model.Quiz;
 import org.vz.quizapp.model.Response;
 import org.vz.quizapp.service.QuizService;
 
@@ -32,14 +33,20 @@ public class QuizController {
         return quizService.createQuiz(category,numQ,title);
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable int id) throws QuestionException {
-        return quizService.getQuizQustions(id);
+    @GetMapping("/get")
+    public ResponseEntity<List<Quiz>> getAllQuizes(){
+        return quizService.getAllQuizes();
+    }
+
+    @GetMapping("/get/{quizId}")
+    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable int quizId) throws QuestionException {
+        return quizService.getQuizQustions(quizId);
     }
 
     //to check the answer given by the user of the quiz
     @PostMapping("/submit/{quizId}")
     public ResponseEntity<Integer> checkScore(@PathVariable Integer quizId , @RequestBody List<Response> responses) throws QuestionException {
+        System.out.println("I m here");
         return quizService.checkScore(quizId , responses);
     }
 }

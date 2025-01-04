@@ -62,7 +62,7 @@ public class QuizService {
             int score=0,i=0;
 
             for(Response response : responses){
-                if(response.getResponse().equals(questions.get(i).getRight_ans()))
+                if(response.getResponse().trim().equals(questions.get(i).getRight_ans().trim()))
                     score++;
                 i++;
             }
@@ -70,5 +70,10 @@ public class QuizService {
         }
         else
             throw new QuestionException("No such Quiz Found!");
+    }
+
+
+    public ResponseEntity<List<Quiz>> getAllQuizes() {
+        return new ResponseEntity<>(quizRepo.findAll() , HttpStatus.OK);
     }
 }
