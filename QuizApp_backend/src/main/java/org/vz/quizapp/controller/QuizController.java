@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.vz.quizapp.exception.QuestionException;
-import org.vz.quizapp.model.QuestionWrapper;
-import org.vz.quizapp.model.Questions;
-import org.vz.quizapp.model.Quiz;
-import org.vz.quizapp.model.Response;
+import org.vz.quizapp.model.*;
 import org.vz.quizapp.service.QuizService;
 
 import java.util.List;
@@ -48,5 +45,10 @@ public class QuizController {
     public ResponseEntity<Integer> checkScore(@PathVariable Integer quizId , @RequestBody List<Response> responses) throws QuestionException {
         System.out.println("I m here");
         return quizService.checkScore(quizId , responses);
+    }
+
+    @PostMapping("/check_ans/{quizId}")
+    public ResponseEntity<List<Answers>> checkAnswers(@PathVariable Integer quizId , @RequestBody List<Response> responses){
+        return quizService.checkAnswers(quizId , responses);
     }
 }

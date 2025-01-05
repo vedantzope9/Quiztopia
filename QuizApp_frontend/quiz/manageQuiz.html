@@ -5,112 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Quizzes</title>
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --light-bg: #f7f7f7;
-            --light-text: #333;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light-bg);
-            color: var(--light-text);
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        .quiz-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .quiz-table th,
-        .quiz-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .quiz-table th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .quiz-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .quiz-table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .button-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .button-group button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: var(--primary-color);
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-group button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .quiz-questions {
-            display: none;
-        }
-
-        .question-card {
-            margin-bottom: 20px;
-        }
-
-        .question-title {
-            font-weight: bold;
-        }
-
-        .options {
-            margin-top: 10px;
-        }
-
-        .options label {
-            display: block;
-            margin: 5px 0;
-        }
-
-        .button-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-        #submitButton{
-            background-color: green;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="manageQuiz.css" >
+    
+</head> 
 
 <body>
     <div class="container" id="quizListContainer">
@@ -127,106 +24,24 @@
         </table>
     </div>
 
-    <div class="container quiz-questions" id="quizQuestionsContainer">
+    <div class="container quiz-questions" id="quizQuestionsContainer" style="display: none;">
         <h1 id="quizTitle">Quiz</h1>
         <div id="questionsContainer"></div>
+        <div class="error-message" id="errorMessage"></div>
         <div class="button-group">
             <button id="submitButton">Submit</button>
             <button id="cancelButton">Cancel</button>
         </div>
     </div>
 
-    <script>
-        // Fetch quizzes and display them in the table
-        document.addEventListener("DOMContentLoaded", function () {
-            const quizTableBody = document.getElementById("quizTableBody");
-
-            fetch("http://localhost:8080/quiz/get")
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(quiz => {
-                        const row = document.createElement("tr");
-
-                        const idCell = document.createElement("td");
-                        idCell.textContent = quiz.id;
-                        row.appendChild(idCell);
-
-                        const titleCell = document.createElement("td");
-                        titleCell.textContent = quiz.title;
-                        row.appendChild(titleCell);
-
-                        const actionCell = document.createElement("td");
-                        const solveButton = document.createElement("button");
-                        solveButton.textContent = "Solve Quiz";
-                        solveButton.addEventListener("click", () => fetchQuiz(quiz.id, quiz.title));
-                        actionCell.appendChild(solveButton);
-                        row.appendChild(actionCell);
-
-                        quizTableBody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error("Error fetching quizzes:", error));
-        });
-
-        // Fetch quiz questions by quiz ID
-        function fetchQuiz(quizId, quizTitle) {
-            const quizListContainer = document.getElementById("quizListContainer");
-            const quizQuestionsContainer = document.getElementById("quizQuestionsContainer");
-            const questionsContainer = document.getElementById("questionsContainer");
-            const quizTitleElement = document.getElementById("quizTitle");
-
-            quizListContainer.style.display = "none";
-            quizQuestionsContainer.style.display = "block";
-            quizTitleElement.textContent = quizTitle;
-            questionsContainer.innerHTML = "";
-
-            fetch(`http://localhost:8080/quiz/get/${quizId}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(question => {
-                        const questionCard = document.createElement("div");
-                        questionCard.className = "question-card";
-
-                        const questionTitle = document.createElement("div");
-                        questionTitle.className = "question-title";
-                        questionTitle.textContent = question.question_title;
-                        questionCard.appendChild(questionTitle);
-
-                        const options = document.createElement("div");
-                        options.className = "options";
-
-                        [question.option1, question.option2, question.option3, question.option4].forEach((option, index) => {
-                            const optionLabel = document.createElement("label");
-                            const optionInput = document.createElement("input");
-                            optionInput.type = "radio";
-                            optionInput.name = `question-${question.id}`;
-                            optionInput.value = option;
-                            optionLabel.appendChild(optionInput);
-                            optionLabel.append(` ${option}`);
-                            options.appendChild(optionLabel);
-                        });
-
-                        questionCard.appendChild(options);
-                        questionsContainer.appendChild(questionCard);
-                    });
-                })
-                .catch(error => console.error("Error fetching quiz questions:", error));
-        }
-
-        // Cancel button functionality
-        document.getElementById("cancelButton").addEventListener("click", function () {
-            const quizListContainer = document.getElementById("quizListContainer");
-            const quizQuestionsContainer = document.getElementById("quizQuestionsContainer");
-
-            quizQuestionsContainer.style.display = "none";
-            quizListContainer.style.display = "block";
-        });
-
-        // Submit button functionality (placeholder)
-        document.getElementById("submitButton").addEventListener("click", function () {
-            alert("Quiz submitted!");
-        });
-    </script>
+    <div class="container score-container" id="scoreContainer" style="display: none;">
+        <h2>Quiz Results</h2>
+        <p id="scoreMessage"></p>
+        <div class="button-group">
+            <button id="backToQuizList">Back to Quiz List</button>
+            <button id="checkAnswersButton">Check Answers</button>
+        </div>
+    </div>
 </body>
-
+<script src="manageQuiz.js"></script>
 </html>

@@ -1,0 +1,156 @@
+/* General Styling */
+:root {
+    --primary-color: #3a86ff;
+    --secondary-color: #8338ec;
+    --highlight-color: #ff006e;
+    --bg-color: #f7f7f7;
+    --text-color: #333;
+    --card-bg: white;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Header Section */
+.header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    color: white;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 70%);
+    margin-bottom: 50px;
+}
+
+.title {
+    font-size: 3rem;
+    margin: 0;
+    animation: slideIn 1s ease-out;
+}
+
+.title span {
+    color: var(--highlight-color);
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin: 10px 0 0;
+    animation: fadeIn 1.5s ease-out;
+}
+
+/* Main Section */
+.main-container {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px;
+}
+
+.link-card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 15px var(--shadow-color);
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: popUp 1s ease-in-out;
+}
+
+.link-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 20px var(--shadow-color);
+}
+
+.icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    animation: bounce 2s infinite;
+}
+
+.link-card h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: var(--secondary-color);
+}
+
+.link-card p {
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+/* Footer Section */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--primary-color);
+    color: white;
+    margin-top: 50px;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.vz.quizapp.exception.QuestionException;
-import org.vz.quizapp.model.QuestionWrapper;
-import org.vz.quizapp.model.Questions;
-import org.vz.quizapp.model.Quiz;
-import org.vz.quizapp.model.Response;
+import org.vz.quizapp.model.*;
 import org.vz.quizapp.repo.QuestionRepo;
 import org.vz.quizapp.repo.QuizRepo;
 
@@ -75,5 +72,22 @@ public class QuizService {
 
     public ResponseEntity<List<Quiz>> getAllQuizes() {
         return new ResponseEntity<>(quizRepo.findAll() , HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Answers>> checkAnswers(Integer quizId, List<Response> responses) {
+        List<Answers> answers=new ArrayList<>();
+
+        for(Response response : responses){
+            Questions que=questionRepo.findById(response.getId()).get();
+
+            boolean b=false;
+            if(response.getResponse().trim().equals(que.getRight_ans().trim())){
+                b=true;
+            }
+
+            Answers ans=new Answers(que.getId() , que.getQuestion_title(), que.getOption1(), que.getOption2(), que.getOption3(),que.getOption4(), response.getResponse(),que.getRight_ans(), b);
+            answers.add(ans);
+        }
+        return new ResponseEntity<>(answers , HttpStatus.OK);
     }
 }
