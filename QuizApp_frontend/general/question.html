@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions - Quiztopia</title>
+    <link rel="stylesheet" href="question.css" >
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Manage Your <span>Questions</span></h1>
+        <p>Choose an option to proceed</p>
+    </header>
+
+    <!-- Main Section -->
+    <main class="main-container">
+        <div class="link-container">
+            <div class="link-card" id="addQuestion">
+                <div class="icon">➕</div>
+                <h2>Add Question</h2>
+                <p>Create a new question for your quizzes</p>
+            </div>
+
+            <div class="link-card" id="findCategory">
+                <div class="icon">🔍</div>
+                <h2>Find Questions</h2>
+                <p>Search questions by their category</p>
+            </div>
+
+            <div class="link-card" id="viewAll">
+                <div class="icon">📄</div>
+                <h2>View All Questions</h2>
+                <p>Browse through all available questions</p>
+            </div>
+        </div>
+
+        <!-- Cancel Button -->
+        <button class="cancel-button" onclick="goBack()">Cancel</button>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Quiztopia. All rights reserved.</p>
+    </footer>
+
+</body>
+<script src="question.js"></script>
+</html>

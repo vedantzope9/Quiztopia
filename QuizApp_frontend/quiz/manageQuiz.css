@@ -74,6 +74,31 @@ h1 {
     background-color: var(--green-color);
     transform: scale(1.05);
 }
+.cancel-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+.cancel-button:hover {
+    background-color: darkred;
+}
+
+.cancel-container {
+    text-align: right; /* Align button to the right */
+    margin-top: 20px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+}
 
 .button-group {
     margin-top: 20px;
@@ -89,21 +114,15 @@ h1 {
 }
 
 #submitButton {
+    padding: 10px 20px;
     background-color: var(--green-color);
+    font-size: 16px;
+    
     color: white;
 }
 
 #submitButton:hover {
     background-color: #218838;
-}
-
-#cancelButton {
-    background-color: var(--grey-color);
-    color: white;
-}
-
-#cancelButton:hover {
-    background-color: #5a6268;
 }
 
 .quiz-questions .question-card {
@@ -168,3 +187,4 @@ h1 {
 .answer-card {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
