@@ -1,13 +1,44 @@
+:root {
+    --primary-color: #3a86ff;
+    --secondary-color: #8338ec;
+    --highlight-color: #ff006e;
+    --bg-color: #f7f7f7;
+    --text-color: #333;
+    --card-bg: white;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
     padding: 0;
     background-color: #f7f7f7;
 }
-h1 {
+
+/* Header Section */
+.header {
     text-align: center;
-    color: #333;
+    padding: 50px 20px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    color: white;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 70%);
 }
+
+.title {
+    font-size: 3rem;
+    margin: 0;
+    animation: slideIn 1s ease-out;
+}
+
+h1 {
+    color: #ff006e;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
 form {
     margin: 20px auto;
     padding: 20px;
@@ -17,48 +48,121 @@ form {
     max-width: 600px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
-input, button {
+
+input,
+button {
     width: 100%;
     padding: 8px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 button {
     background-color: #007bff;
     color: #fff;
     border: none;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
 .result {
     margin: 20px auto;
-    padding: 20px;
+    padding: 0px;
     background: #e9ecef;
     border-radius: 8px;
-    max-width: 600px;
+    max-width: 1300px;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px auto;
     background: #fff;
 }
-table, th, td {
+
+table,
+th,
+td {
     border: 1px solid #ddd;
 }
-th, td {
+
+th,
+td {
     padding: 8px;
     text-align: left;
 }
+
 th {
     background-color: #007bff;
     color: white;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    margin-top: 80px;
+    background-color: #c93030;
+    color: rgb(242, 242, 242);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: auto;
+    display: inline-block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn:hover {
+    background-color: #ff0404;
+}
+
+/* Footer Section */
+.footer {
+    text-align: center;
+    padding: 15px;
+    background: var(--primary-color);
+    color: white;
+    margin-top: 69px;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }

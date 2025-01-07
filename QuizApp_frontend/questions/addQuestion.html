@@ -3,47 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuizApp - Questions</title>
+    <title>QuizApp - Add Question</title>
     <link rel="stylesheet" href="addQuestion.css">
-    <script src="addQuestion.js"></script>
+    <script src="addQuestion.js" defer></script>
 </head>
 <body>
-    <h1>QuizApp - Manage Questions</h1>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="title"><span>Quiztopia </span>: Add a Question</h1>
+        <p class="subtitle">Enhance your quiz with new questions!</p>
+    </header>
 
     <!-- Add Question Form -->
-    <form id="addQuestionForm">
-        <h2>Add a New Question</h2>
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+    <main class="main-container">
+        <form id="addQuestionForm" class="form-container">
+            <h2>Add a New Question</h2>
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" placeholder="Enter category" required>
 
-        <label for="difficultyLevel">Difficulty Level:</label>
-        <input type="text" id="difficultyLevel" name="difficultyLevel" required>
+            <label for="difficultyLevel">Difficulty Level:</label>
+            <input type="text" id="difficultyLevel" name="difficultyLevel" placeholder="Enter difficulty level" required>
 
-        <label for="question_title">Question Title:</label>
-        <input type="text" id="question_title" name="question_title" required>
+            <label for="question_title">Question Title:</label>
+            <input type="text" id="question_title" name="question_title" placeholder="Enter the question" required>
 
-        <label for="option1">Option 1:</label>
-        <input type="text" id="option1" name="option1" required>
+            <label for="option1">Option 1:</label>
+            <input type="text" id="option1" name="option1" placeholder="Enter option 1" required>
 
-        <label for="option2">Option 2:</label>
-        <input type="text" id="option2" name="option2" required>
+            <label for="option2">Option 2:</label>
+            <input type="text" id="option2" name="option2" placeholder="Enter option 2" required>
 
-        <label for="option3">Option 3:</label>
-        <input type="text" id="option3" name="option3" required>
+            <label for="option3">Option 3:</label>
+            <input type="text" id="option3" name="option3" placeholder="Enter option 3" required>
 
-        <label for="option4">Option 4:</label>
-        <input type="text" id="option4" name="option4" required>
+            <label for="option4">Option 4:</label>
+            <input type="text" id="option4" name="option4" placeholder="Enter option 4" required>
 
-        <label for="right_ans">Right Answer:</label>
-        <input type="text" id="right_ans" name="right_ans" required>
+            <label for="right_ans">Right Answer:</label>
+            <input type="text" id="right_ans" name="right_ans" placeholder="Enter the right answer" required>
 
-        <button type="button" onclick="addQuestion()">Add Question</button>
-    </form>
+            <div class="buttons">
+                <button type="button" onclick="addQuestion()">Add Question</button>
+                <button type="button" onclick="window.history.back()">Cancel</button>
+            </div>
+        </form>
 
-    <!-- Result Display -->
-    <div id="result" class="result" style="display: none;">
-        <h2>Result</h2>
-        <pre id="resultContent"></pre>
-    </div>
+        <!-- Result Display -->
+        <div id="result" class="result" style="display: none;">
+            <h2>Result</h2>
+            <pre id="resultContent"></pre>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 QuizApp. All rights reserved.</p>
+    </footer>
 </body>
 </html>

@@ -15,6 +15,29 @@ body {
     color: var(--light-text);
 }
 
+/* Header Section */
+.header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(to right, #3a86ff, #8338ec);
+    color: white;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 70%);
+}
+
+.title {
+    font-size: 3rem;
+    margin: 0;
+    animation: slideIn 1s ease-out;
+}
+h1{
+    color: #ff006e;
+}
+.subtitle {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+
 .container {
     max-width: 600px;
     margin: 50px auto;
@@ -101,4 +124,36 @@ body {
 
 .ok-button:hover {
     background-color: var(--primary-color);
+}
+
+/* Footer Section */
+.footer {
+    text-align: center;
+    padding: 10px;
+    background: #3a86ff;
+    color: white;
+    margin-top: 10px;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }

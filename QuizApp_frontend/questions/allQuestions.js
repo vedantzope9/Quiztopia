@@ -133,7 +133,7 @@ let currentQuestionId;
 
                 if (response.ok) {
                     alert('Question updated successfully!');
-                    goBack();
+                    goBack(currentQuestionId);
                     fetchAllQuestions(); // Refresh questions list
                 } else {
                     alert('Failed to update question. Please try again.');
